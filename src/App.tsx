@@ -1,24 +1,27 @@
-import { BrowserRouter } from 'react-router-dom'
-import { Provider } from 'react-redux'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import Header from './components/Header'
-import Carrinho from './components/Carrinho'
-import { GlobalCss } from './styles'
-import store from './store'
+import Home from './pages/Home'
+import Restaurants from './pages/Restaurants'
 
-import Rotas from './routes'
-import Footer from './components/Footer'
+import Footer from './container/Footer'
+import Cart from './container/Cart'
+
+import EstiloGlobal from './styles'
+
+const Rotas = () => (
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/restaurantes" element={<Restaurants />} />
+  </Routes>
+)
 
 function App() {
   return (
     <BrowserRouter>
-      <Provider store={store}>
-        <GlobalCss />
-        <Header />
-        <Rotas />
-        <Footer />
-        <Carrinho />
-      </Provider>
+      <EstiloGlobal />
+      <Rotas />
+      <Footer />
+      <Cart />
     </BrowserRouter>
   )
 }

@@ -1,45 +1,56 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Prato } from '../models/Prato'
+
+export type CartItem = {
+  cartId: string
+  id: number
+  nome: string
+  preco: number
+  imagem: string
+}
 
 type CartState = {
-  itens: Prato[]
-  aberto: boolean
+  itens: CartItem[]
+  estaAberto: boolean
 }
 
 const initialState: CartState = {
   itens: [],
-  aberto: false
+  estaAberto: false
 }
 
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    adicionar: (state, action: PayloadAction<Prato>) => {
-      state.itens.push(action.payload)
-      state.aberto = true
+    adicionarAoCarrinho: (
+      state,
+      action: PayloadAction<Omit<CartItem, 'cartId'>>
+    ) => {
+      state.itens.push({
+        ...action.payload,
+        // cada clique gera um item novo no carrinho (mesmo que seja o
+        // mesmo produto), por isso precisamos de um id único aqui
+        cartId: `${action.payload.id}-${Date.now()}-${Math.random()}`
+      })
+      state.estaAberto = true
     },
-    remover: (state, action: PayloadAction<number>) => {
-      state.itens.splice(action.payload, 1)
+    removerDoCarrinho: (state, action: PayloadAction<string>) => {
+      state.itens = state.itens.filter((item) => item.cartId !== action.payload)
     },
     abrirCarrinho: (state) => {
-      state.aberto = true
+      state.estaAberto = true
     },
     fecharCarrinho: (state) => {
-      state.aberto = false
-    },
-    alternarCarrinho: (state) => {
-      state.aberto = !state.aberto
+      state.estaAberto = false
     }
   }
 })
 
 export const {
-  adicionar,
-  remover,
+  adicionarAoCarrinho,
+  removerDoCarrinho,
   abrirCarrinho,
-  fecharCarrinho,
-  alternarCarrinho
+  fecharCarrinho
 } = cartSlice.actions
 
 export default cartSlice.reducer

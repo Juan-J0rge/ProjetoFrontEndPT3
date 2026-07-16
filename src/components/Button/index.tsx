@@ -1,27 +1,16 @@
-import { ButtonContainer, ButtonLink } from './styles'
+import { StyledCardButton, StyledMenuItemButton } from './style'
 
 type Props = {
-  type: 'button' | 'link'
-  title: string
-  to?: string
-  onClick?: () => void
   children: string
+  to: string
 }
 
-const Button = ({ type, title, to, onClick, children }: Props) => {
-  if (type === 'button') {
-    return (
-      <ButtonContainer type="button" title={title} onClick={onClick}>
-        {children}
-      </ButtonContainer>
-    )
-  }
+export const CardButton = (props: Props) => (
+  <StyledCardButton to={`/restaurantes?q=${props.to}`}>
+    {props.children}
+  </StyledCardButton>
+)
 
-  return (
-    <ButtonLink to={to as string} title={title}>
-      {children}
-    </ButtonLink>
-  )
-}
-
-export default Button
+export const MenuItemButton = (props: Props) => (
+  <StyledMenuItemButton>{props.children}</StyledMenuItemButton>
+)
